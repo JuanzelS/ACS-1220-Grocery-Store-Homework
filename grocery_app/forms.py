@@ -3,7 +3,7 @@ from wtforms import StringField, FloatField, SelectField, SubmitField, PasswordF
 from wtforms_sqlalchemy.fields import QuerySelectField
 from wtforms.validators import DataRequired, Length, URL, Optional, ValidationError
 from grocery_app.models import GroceryStore, GroceryItem, User
-from grocery_app import bcrypt
+from grocery_app.extensions import bcrypt  # Change this line
 
 # TODO: Create a form class for new grocery stores
 class GroceryStoreForm(FlaskForm):

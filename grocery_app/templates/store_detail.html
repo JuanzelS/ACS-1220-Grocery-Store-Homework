@@ -28,7 +28,8 @@
 
         <!-- TODO: Remove the next paragraph and use the `form` object passed in 
             from the route to render a form. -->
-        <p><em>Form fields go here!</em></p>
+     
+<p>Created by: {{ store.created_by.username if store.created_by else 'Unknown' }}</p>
 
         <input type="submit" value="Submit">
     </fieldset>
