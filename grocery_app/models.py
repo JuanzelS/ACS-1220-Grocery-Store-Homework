@@ -2,6 +2,7 @@ from grocery_app.extensions import db
 from grocery_app.utils import FormEnum
 
 
+
 class ItemCategory(FormEnum):
     """Categories of grocery items."""
     PRODUCE = 'Produce'
