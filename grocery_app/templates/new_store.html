@@ -1,21 +1,30 @@
 {% extends 'base.html' %}
 {% block content %}
-
 <h1>New Store</h1>
-
 <form method="POST">
+    {{ form.csrf_token }}
     <fieldset>
         <legend>Please enter your information:</legend>
-
-
-
-        <!-- TODO: Remove the next paragraph and use the `form` object passed in 
-            from the route to render a form. -->
-        <p><em>Form fields go here!</em></p>
-
-        <input type="submit" value="Submit">
+        <!-- Use the form object passed from the route to render form fields -->
+        <p>
+            {{ form.title.label }}<br>
+            {{ form.title }}
+            {% if form.title.errors %}
+                {% for error in form.title.errors %}
+                    <span class="error">{{ error }}</span>
+                {% endfor %}
+            {% endif %}
+        </p>
+        <p>
+            {{ form.address.label }}<br>
+            {{ form.address }}
+            {% if form.address.errors %}
+                {% for error in form.address.errors %}
+                    <span class="error">{{ error }}</span>
+                {% endfor %}
+            {% endif %}
+        </p>
+        {{ form.submit }}
     </fieldset>
 </form>
-
-
 {% endblock %}

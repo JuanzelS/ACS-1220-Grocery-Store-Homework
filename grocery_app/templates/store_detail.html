@@ -1,38 +1,62 @@
 {% extends 'base.html' %}
 {% block content %}
+<h1>{{ store.title }}</h1>
 
-<h1>Store - {{ store.title }}</h1>
-
-<strong>Address:</strong> {{ store.address }}
-
-<h2>Items</h2>
-
-<div class="items">
-    {% for item in store.items %}
-    <div class="item-details">
-        <a href="/item/{{ item.id }}"><img src="{{ item.photo_url }}" alt="{{ item.name }}" width="200px">
-        <p><strong>{{ item.name }}</strong></p></a>
-        <p><strong>Price: ${{ item.price }}</strong></p>
-    </div>
-    {% endfor %}
-</div>
-
-
-<h2>Edit Store</h2>
-
-<form>
-    <fieldset>
-        <legend>Please enter your information:</legend>
-
-
-
-        <!-- TODO: Remove the next paragraph and use the `form` object passed in 
-            from the route to render a form. -->
-     
+<p>Address: {{ store.address }}</p>
 <p>Created by: {{ store.created_by.username if store.created_by else 'Unknown' }}</p>
 
-        <input type="submit" value="Submit">
+<h2>Items</h2>
+{% if store.items %}
+<ul>
+    {% for item in store.items %}
+    <li>
+        <a href="{{ url_for('main.item_detail', item_id=item.id) }}">{{ item.name }}</a> - ${{ item.price }}
+        
+        <!-- Display item image if available -->
+        {% if item.photo_url %}
+        <br>
+        <img src="{{ item.photo_url }}" alt="{{ item.name }}" width="100px" height="100px">
+        {% endif %}
+        
+        <!-- Add Remove button for items created by current user -->
+        {% if item.created_by == current_user %}
+        <form method="POST" action="{{ url_for('main.remove_item', item_id=item.id) }}" style="display:inline;">
+            <input type="submit" value="Remove" onclick="return confirm('Are you sure you want to remove this item?');">
+        </form>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No items in this store yet.</p>
+{% endif %}
+
+<h2>Edit Store</h2>
+<form method="POST">
+    {{ form.csrf_token }}
+    <fieldset>
+        <legend>Edit store:</legend>
+        <p>
+            {{ form.title.label }}<br>
+            {{ form.title }}
+            {% if form.title.errors %}
+                {% for error in form.title.errors %}
+                    <span class="error">{{ error }}</span>
+                {% endfor %}
+            {% endif %}
+        </p>
+        <p>
+            {{ form.address.label }}<br>
+            {{ form.address }}
+            {% if form.address.errors %}
+                {% for error in form.address.errors %}
+                    <span class="error">{{ error }}</span>
+                {% endfor %}
+            {% endif %}
+        </p>
+        {{ form.submit }}
     </fieldset>
 </form>
 
+<p><a href="{{ url_for('main.new_item') }}">Add New Item</a></p>
 {% endblock %}

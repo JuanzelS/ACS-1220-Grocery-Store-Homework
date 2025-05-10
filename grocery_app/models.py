@@ -11,6 +11,12 @@ class ItemCategory(FormEnum):
     FROZEN = 'Frozen'
     OTHER = 'Other'
 
+# Create the shopping list table
+shopping_list_table = db.Table('shopping_list',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('item_id', db.Integer, db.ForeignKey('grocery_item.id'))
+)
+
 class User(UserMixin, db.Model):
     """User model."""
     id = db.Column(db.Integer, primary_key=True)
@@ -20,6 +26,12 @@ class User(UserMixin, db.Model):
     # Relationships
     stores = db.relationship('GroceryStore', back_populates='created_by')
     items = db.relationship('GroceryItem', back_populates='created_by')
+    
+    # Shopping list relationship
+    shopping_list_items = db.relationship('GroceryItem',
+        secondary=shopping_list_table,
+        backref=db.backref('shopping_users', lazy='dynamic'),
+        lazy='dynamic')
 
 class GroceryStore(db.Model):
     """Grocery Store model."""

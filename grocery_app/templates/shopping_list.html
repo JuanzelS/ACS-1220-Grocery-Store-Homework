@@ -1,21 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
-
 <h1>My Shopping List</h1>
-
 {% if items %}
-  <ul>
+<ul>
     {% for item in items %}
-      <li>
-        {{ item.name }} - ${{ item.price }} ({{ item.category.name }})
+    <li>
+        <a href="{{ url_for('main.item_detail', item_id=item.id) }}">{{ item.name }}</a> - ${{ item.price }} ({{ item.category.name }})
         <form method="POST" action="{{ url_for('main.remove_from_shopping_list', item_id=item.id) }}" style="display:inline;">
-          <input type="submit" value="Remove">
+            <input type="submit" value="Remove">
         </form>
-      </li>
+    </li>
     {% endfor %}
-  </ul>
+</ul>
 {% else %}
-  <p>Your shopping list is empty.</p>
+<p>Your shopping list is empty.</p>
 {% endif %}
 
+<p><a href="{{ url_for('main.homepage') }}">Browse more items</a></p>
 {% endblock %}
